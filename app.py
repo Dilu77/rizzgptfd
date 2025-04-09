@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Load model and tokenizer
-MODEL_ID = os.getenv("MODEL_ID", "myownfd/rizzgpt")
+MODEL_ID = os.getenv("MODEL_ID", "myownfd/rizzgpt-small")
 tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
 model = AutoModelForCausalLM.from_pretrained(MODEL_ID)
 
