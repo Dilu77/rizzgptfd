@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RizzGPT - Ultimate Rizz Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9c27b0, #673ab7);
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff9800;
+        }
+        .chat-area {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #673ab7;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #ff9800;
+            color: black;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 5px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #ffb74d;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RizzGPT</h1>
+        <div class="chat-area" id="chatArea">
+            <div class="message bot-message">
+                Hey there! Send me a message you've received and I'll help you respond with the ultimate rizz!
+            </div>
+        </div>
+        <div class="loading" id="loading">Generating rizz... 🔥</div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Enter a message to respond to...">
+            <button onclick="generateRizz()">Get Rizz</button>
+        </div>
+    </div>
+
+    <script>
+        function generateRizz() {
+            const userInput = document.getElementById('userInput').value.trim();
+            if (!userInput) return;
+
+            // Add user message to chat
+            addMessage(userInput, 'user-message');
+            
+            // Clear input
+            document.getElementById('userInput').value = '';
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            
+            // Call API
+            fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                
+                // Add bot message
+                addMessage(data.response, 'bot-message');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                addMessage('Sorry, something went wrong. Please try again.', 'bot-message');
+            });
+        }
+
+        function addMessage(text, className) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${className}`;
+            messageDiv.textContent = text;
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                generateRizz();
+            }
+        });
+    </script>
+</body>
+</html>
