@@ -1,0 +1,7 @@
+transformers==4.32.1
+datasets==2.14.5
+torch==2.0.1
+flask==2.3.3
+python-dotenv==1.0.0
+huggingface-hub==0.16.4
+gunicorn==21.2.0
